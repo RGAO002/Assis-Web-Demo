@@ -1,0 +1,7 @@
+.content-col {
+  transition: transform 0.6s ease-in-out;
+}
+
+.content-col.collapsed {
+  transform: translateX(-200px);
+}
