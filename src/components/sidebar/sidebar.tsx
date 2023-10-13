@@ -79,7 +79,9 @@ function Sidebar({ collapsed, setCollapsed, onRefUpdated }: SidebarProps) {
             </MenuItem>
           </SubMenu>
         </Menu>
-        <div className="menu-footer">Beta Web Version v0.1.0</div>
+        <div className="menu-footer">
+          {collapsed ? "v0.1.1" : "Beta Web Version v0.1.1"}
+        </div>
       </Sbar>
       <div
         style={{
