@@ -18,6 +18,7 @@ const Home = () => {
   const [showActions, setShowActions] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const fullNote = `Introducing ASSIS: Your Voice-to-Note Companion
 
@@ -51,7 +52,7 @@ const Home = () => {
             `${prevNote} ${fullNote.split(" ")[currentWordIndex.current]}`
         );
         currentWordIndex.current += 1;
-        textInterval = setTimeout(updateNote, Math.random() * 2000);
+        textInterval = setTimeout(updateNote, Math.random() * 1000);
       }
     };
 
@@ -80,6 +81,8 @@ const Home = () => {
   };
 
   const handlePauseContinue = () => {
+    if (isRecording) setIsPaused(true);
+    else setIsPaused(false);
     setIsRecording(!isRecording);
   };
 
@@ -151,25 +154,29 @@ const Home = () => {
                 {/* ... other components ... */}
               </div>
               <div className="mt-3">{formatTime(recordingTime)}</div>
-              <Button
-                variant="warning"
-                className="mt-4 m-3"
-                onClick={handlePauseContinue}
-              >
-                {isRecording ? "Pause" : "Continue"}
-              </Button>
-              <Button
-                variant="dark"
-                className="mt-4 m-3 ml-2"
-                onClick={handleStop}
-              >
-                Stop
-              </Button>
+              {(isRecording || isPaused) && (
+                <Button
+                  variant="warning"
+                  className="mt-4 m-3"
+                  onClick={handlePauseContinue}
+                >
+                  {isRecording ? "Pause" : "Continue"}
+                </Button>
+              )}
+              {(isRecording || isPaused) && (
+                <Button
+                  variant="dark"
+                  className="mt-4 m-3 ml-2"
+                  onClick={handleStop}
+                >
+                  Stop
+                </Button>
+              )}
               <FormControl
                 as="textarea"
                 value={note}
                 readOnly
-                className="mb-3 large-textbox"
+                className="mb-3 mt-3 large-textbox"
               />
               {showActions && (
                 <div className="d-flex justify-content-between">

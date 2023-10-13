@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { FirstDataRenderedEvent } from "ag-grid-community";
+import { FiHeart, FiTrash } from "react-icons/fi";
+
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
@@ -25,9 +27,19 @@ const Notes: React.FC = () => {
     },
     // ... Other notes
   ]);
+
+  const deleteRow = (params: any) => {
+    console.log(params);
+    const idToDelete = params.node.data.name;
+    setRowData((prevRowData) =>
+      prevRowData.filter((row) => row.name !== idToDelete)
+    );
+  };
   const frameworkComponents = {
-    favoritesButton: () => <button>Add to Favorites</button>,
-    deleteButton: () => <button>Delete</button>,
+    favoritesButton: () => <FiHeart size={20} color="red" />,
+    deleteButton: (params: any) => (
+      <FiTrash size={20} color="red" onClick={() => deleteRow(params)} />
+    ),
   };
 
   const columnDefs: any[] = [
@@ -40,19 +52,31 @@ const Notes: React.FC = () => {
     {
       headerName: "Name",
       field: "name",
-      // cellStyle: { textAlign: "center" },
+      cellStyle: { width: "auto" },
       resizable: true,
     },
-    { headerName: "Type", field: "type", resizable: true },
-    { headerName: "Creation Date", field: "creationDate", resizable: true },
+    {
+      headerName: "Type",
+      field: "type",
+      resizable: true,
+      cellStyle: { width: "auto" },
+    },
+    {
+      headerName: "Creation Date",
+      field: "creationDate",
+      resizable: true,
+      cellStyle: { width: "auto" },
+    },
     {
       headerName: "Favorites",
       resizable: true,
+      cellStyle: { width: "100px" },
       cellRenderer: frameworkComponents.favoritesButton,
     },
     {
       headerName: "Actions",
       resizable: true,
+      cellStyle: { width: "100px" },
       cellRenderer: frameworkComponents.deleteButton,
     },
   ];
@@ -69,7 +93,11 @@ const Notes: React.FC = () => {
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}
-        defaultColDef={{ editable: true, sortable: true, filter: true }}
+        defaultColDef={{
+          editable: true,
+          sortable: true,
+          filter: "agTextColumnFilter",
+        }}
         domLayout="print"
         animateRows={true}
         rowSelection="multiple"
